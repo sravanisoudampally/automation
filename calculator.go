@@ -5,7 +5,7 @@ import (
     "html/template"
     "net/http"
     "strconv"
-)0
+))
 
 func main() {
     r := gin.Default()
