@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Fetch Dependencies') {
+        stage('mod downlod') {
             steps {
                 sh 'go mod download'
             }
