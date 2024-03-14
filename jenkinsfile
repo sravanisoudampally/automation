@@ -42,9 +42,7 @@ pipeline {
 
                     // Use SCP to copy files to the Nginx server
                     sh "scp -r ${localFilePath} ${nginxServerUsername}@${nginxServerHost}:${nginxServerPath}"
-                    sh 'ssh ubuntu@ip'
-                    sh 'cd go-project'
-                    sh 'go run main.go'
+                   
 
                 }
                 }
