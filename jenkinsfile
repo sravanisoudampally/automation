@@ -1,11 +1,5 @@
 pipeline {
-    agent {
-        label 'jenkins'
-    }
-    
-    environment {
-        PATH = "$PATH:/usr/local/go/bin"
-    }
+    agent any
 
     stages {
         stage('Build') {
@@ -30,7 +24,6 @@ pipeline {
         }
 
         stage('Deploy') {
-          
             steps {
                 script {
                     def goServerUsername = 'jenkins'
@@ -40,18 +33,28 @@ pipeline {
 
                     // Use SCP to copy files to the Go server
                     sh "scp -r ${localFilePath} ${goServerUsername}@${goServerHost}:${goServerPath}"
-                    
                 }
             }
         }
-      stage('run'){
-agent {
-                label 'agent-node'
+
+        stage('Run Command') {
+            steps {
+                script {
+                    // Check if the lock file exists
+                    if (fileExists('lockfile')) {
+                        echo "Previous build is still running. Skipping this build."
+                    } else {
+                        // Create the lock file
+                        writeFile file: 'lockfile', text: ''
+                        
+                        // Run your command here
+                        sh 'cd /home/jenkins/go-project && go run calculator.go'
+                        
+                        // Remove the lock file when the command is done
+                        deleteDir()
+                    }
+                }
             }
-steps{
-            sh 'cd /home/jenkins/go-project'
-            sh 'go run calculator.go '
+        }
     }
-}
-}
 }
