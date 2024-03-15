@@ -50,13 +50,16 @@ pipeline {
             steps {
                 script {
                     def goProjectDir = '/home/jenkins/go-project'
+                    def goProgram = 'calculator.go'
                     
                     // Navigate to the Go project directory
                     dir(goProjectDir) {
-                        // Run the Go program
-                        sh 'go run calculator.go'
+                        // Run the Go program using nohup to detach it from the terminal
+                        sh "nohup go run ${goProgram} &"
                     }
                 }
+               
+               
             }
         }
     }
