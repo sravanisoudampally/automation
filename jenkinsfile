@@ -51,7 +51,7 @@ agent {
             }
 steps{
             sh 'cd /home/jenkins/go-project'
-            sh 'go run calculator.go'
+            sh 'go run calculator.go &'
     }
 }
 }
