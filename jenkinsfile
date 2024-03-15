@@ -55,7 +55,7 @@ pipeline {
                     // Navigate to the Go project directory
                     dir(goProjectDir) {
                         // Run the Go program using nohup to detach it from the terminal
-                        sh "nohup go run ${goProgram} &"
+                        sh "nohup go run ${goProgram} "
                     }
                 }
                
