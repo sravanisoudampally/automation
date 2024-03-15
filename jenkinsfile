@@ -53,6 +53,7 @@ PORT = '8888'
                     def goProjectDir = '/home/jenkins/go-project'
                     def goProgram = 'calculator.go'
                      def port = '8888'
+sh "pkill -f 'go run ${goProgram}'"
                     // Navigate to the Go project directory
                     dir(goProjectDir) {
                         // Run the Go program using nohup to detach it from the terminal
