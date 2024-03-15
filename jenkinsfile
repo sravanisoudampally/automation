@@ -52,7 +52,7 @@ PORT = '8888'
                 script {
                     def goProjectDir = '/home/jenkins/go-project'
                     def goProgram = 'calculator.go'
-                    
+                     def port = '8888'
                     // Navigate to the Go project directory
                     dir(goProjectDir) {
                         // Run the Go program using nohup to detach it from the terminal
