@@ -5,6 +5,7 @@ import (
     "html/template"
     "net/http"
     "strconv"
+    "math" // Import the math package for square root calculation
 )
 
 func main() {
@@ -27,6 +28,7 @@ func main() {
                 <button type="submit" name="operation" value="subtract">Subtraction</button>
                 <button type="submit" name="operation" value="multiply">Multiplication</button>
                 <button type="submit" name="operation" value="divide">Division</button>
+                <button type="submit" name="operation" value="rootsquare">Square Root</button> <!-- Add a button for square root -->
             </form>
             <br>
             {{if .Result}}
@@ -59,6 +61,8 @@ func main() {
             } else {
                 result = strconv.Itoa(a / b)
             }
+        case "rootsquare": // Handle square root calculation
+            result = strconv.FormatFloat(math.Sqrt(float64(a)), 'f', -1, 64)
         }
 
         c.HTML(http.StatusOK, "", gin.H{"Result": result})
