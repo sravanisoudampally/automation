@@ -36,9 +36,9 @@ pipeline {
             }
             steps {
                 script {
-                    def goServerUsername = 'ubuntu'
-                    def goServerHost = '13.40.68.224'
-                    def goServerPath = '/home/ubuntu/go-project'
+                    def goServerUsername = 'jenkins'
+                    def goServerHost = '18.132.14.53'
+                    def goServerPath = '/home/jenkins/go-project'
                     def localFilePath = '/path/to/local/file'
 
                     // Use SCP to copy files to the Go server
