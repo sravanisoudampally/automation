@@ -51,13 +51,21 @@ PORT = '8888'
             steps {
                 script {
                     def goProjectDir = '/home/jenkins/go-project'
-                    def goProgram = 'calculator.go'
-                     def port = '8888'
-sh "pkill -f 'go run ${goProgram}'"
-                    // Navigate to the Go project directory
-                    dir(goProjectDir) {
-                        // Run the Go program using nohup to detach it from the terminal
-                        sh "nohup go run ${goProgram} "
+            def goProgram = 'calculator.go'
+            def port = '8888'
+            
+            // Find the process ID (PID) of the process running the Go program on port 8888
+            def pid = sh(script: "lsof -ti:${port} -sTCP:LISTEN -c '${goProgram}'", returnStdout: true).trim()
+            
+            // Kill the process if PID is not empty
+            if (pid) {
+                sh "kill ${pid}"
+            }
+            
+            // Navigate to the Go project directory
+            dir(goProjectDir) {
+                // Run the Go program using nohup to detach it from the terminal
+                sh "nohup go run ${goProgram} &"
                     }
                 }
                
