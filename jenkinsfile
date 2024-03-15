@@ -1,18 +1,17 @@
+
 pipeline {
-    agent{
-label 'buildnode name '
+    agent {
+        label 'buildnode_name'
+    }
     
     environment {
         PATH = "$PATH:/usr/local/go/bin"
     }
 
     stages {
-       
-        
-        
         stage('Build') {
             steps {
-               sh 'go build'
+                sh 'go build'
             }
         }
         
@@ -22,34 +21,31 @@ label 'buildnode name '
             }
         }
 
-
- stage('Email Approval') {
-    steps {
-        mail to: 'sravanisoudampally@gmail.com',
-             subject: "Job '${JOB_NAME}' (${BUILD_NUMBER}) is waiting for input",
-             body: "Please go to ${BUILD_URL} and verify the build"
-        input (message: 'Proceed with deployment?', ok: 'Deploy')
-    }
-}
-
-        
-       stage('Deploy') {
+        stage('Email Approval') {
             steps {
+                mail to: 'sravanisoudampally@gmail.com',
+                     subject: "Job '${JOB_NAME}' (${BUILD_NUMBER}) is waiting for input",
+                     body: "Please go to ${BUILD_URL} and verify the build"
+                input (message: 'Proceed with deployment?', ok: 'Deploy')
+            }
+        }
 
-agent{
-label ' agent label name'
+        stage('Deploy') {
+            agent {
+                label 'agent_label_name'
+            }
+            steps {
                 script {
                     def goServerUsername = 'ubuntu'
                     def goServerHost = '13.40.68.224'
                     def goServerPath = '/home/ubuntu/go-project'
-                    def localFilePath = ''
+                    def localFilePath = '/path/to/local/file'
 
-                    // Use SCP to copy files to the Nginx server
-                    sh "scp -r ${localFilePath} ${nginxServerUsername}@${nginxServerHost}:${nginxServerPath}"
-                sh 'go run calculator.go'
-
+                    // Use SCP to copy files to the Go server
+                    sh "scp -r ${localFilePath} ${goServerUsername}@${goServerHost}:${goServerPath}"
+                    sh "ssh ${goServerUsername}@${goServerHost} 'cd ${goServerPath} && go run calculator.go'"
                 }
-                }
-    }
+            }
+        }
     }
 }
