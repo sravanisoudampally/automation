@@ -1,7 +1,7 @@
 
 pipeline {
     agent {
-        label 'buildnode_name'
+        label 'jenkins'
     }
     
     environment {
@@ -31,21 +31,28 @@ pipeline {
         }
 
         stage('Deploy') {
-            agent {
-                label 'agent_label_name'
-            }
+          
             steps {
                 script {
                     def goServerUsername = 'jenkins'
                     def goServerHost = '18.132.14.53'
                     def goServerPath = '/home/jenkins/go-project'
-                    def localFilePath = '/path/to/local/file'
+                    def localFilePath = ''
 
                     // Use SCP to copy files to the Go server
                     sh "scp -r ${localFilePath} ${goServerUsername}@${goServerHost}:${goServerPath}"
-                    sh "ssh ${goServerUsername}@${goServerHost} 'cd ${goServerPath} && go run calculator.go'"
+                    
                 }
             }
         }
+      stage('run'){
+agent {
+                label 'agent-node'
+            }
+steps{
+            sh 'cd /home/jenkins/go-project'
+            sh 'go run calculator.go'
     }
+}
+}
 }
