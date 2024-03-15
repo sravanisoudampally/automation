@@ -5,7 +5,6 @@ pipeline {
     
     environment {
         PATH = "$PATH:/usr/local/go/bin"
-PORT = '8888'
     }
 
     stages {
@@ -31,6 +30,7 @@ PORT = '8888'
         }
 
         stage('Deploy') {
+          
             steps {
                 script {
                     def goServerUsername = 'jenkins'
@@ -40,41 +40,18 @@ PORT = '8888'
 
                     // Use SCP to copy files to the Go server
                     sh "scp -r ${localFilePath} ${goServerUsername}@${goServerHost}:${goServerPath}"
+                    
                 }
             }
         }
-        
-        stage('Run') {
-            agent {
+      stage('run'){
+agent {
                 label 'agent-node'
             }
-            steps {
-                script {
-                     def goProjectDir = '/home/jenkins/go-project'
-            def goProgram = 'calculator.go'
-            def port = '8888'
-            
-            // Find the process ID (PID) of the process running the Go program on port 8888
-            def pid = sh(script: "lsof -ti:${port} -sTCP:LISTEN -c '${goProgram}' || true", returnStatus: true, returnStdout: true).trim()
-            
-            // If the PID is empty, it means the process is not currently running
-            if (!pid) {
-                echo "The Go program is not currently running."
-            } else {
-                // Kill the process
-                sh "kill ${pid}"
-            }
-            
-            // Navigate to the Go project directory
-            dir(goProjectDir) {
-                // Run the Go program using nohup to detach it from the terminal
-                sh "nohup go run ${goProgram} &"
-                    
-                    }
-                }
-               
-               
-            }
-        }
+steps{
+            sh 'cd /home/jenkins/go-project'
+            sh 'go run calculator.go '
     }
+}
+}
 }
