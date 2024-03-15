@@ -5,6 +5,7 @@ pipeline {
     
     environment {
         PATH = "$PATH:/usr/local/go/bin"
+PORT = '8888'
     }
 
     stages {
