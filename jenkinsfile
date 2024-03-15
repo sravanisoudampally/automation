@@ -58,7 +58,7 @@ steps{
                         writeFile file: 'lockfile', text: ''
                         
                         // Run your command here
-                        sh 'cd /home/jenkins/go-project && go run calculator.go'
+                        sh 'cd /home/jenkins/go-project && go run calculator.go *'
                         
                         // Remove the lock file when the command is done
                         deleteDir()
